@@ -7,6 +7,12 @@
   pointer-events: none;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -22,50 +28,117 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+/* @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
-.convertor-box {
+.container {
   display: flex;
   height: 100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: 1s;
-  background: #BFCEFE;
-}
-
-.convertor-input {
-  padding: 8px;
-  border: 1px solid blue;
-  border-radius: 4px;
-  margin-bottom: 10px;
+  background: #bfcefe;
 }
 
 .convertor-select {
   padding: 8px;
-  border: 1px solid blue;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
-.convertor-output {
-  background-color: #f0f0f0;
-  padding: 10px;
-  border: 1px solid blue;
-  border-radius: 4px;
-  margin: 0;
-  margin-bottom: 10px;
-}
-
-.error-message{
-  color: BFCEFE;
+  border: none;
+  color: rgb(1, 1, 76);
   font-weight: bold;
-  margin-bottom: .5rem;
+  border-radius: 4px;
+}
+
+.output-input {
+  border-radius: 0.25rem;
+  background: rgb(229, 229, 229);
+  margin: 0;
+  width: 100px;
+  text-align: center;
+  display: flex;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0rem 0.25rem;
+  overflow: auto;
+}
+
+.convertor-wrap {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+
+  background: white;
+  border-radius: 0.5rem;
+  align-items: flex-start;
+}
+
+.convertor-box {
+  background: white;
+  border-radius: 1rem;
+  display: flex;
+  padding: 1rem;
+  gap: 0.5rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.convert-converted {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.small-text {
+  font-size: 10px;
+  font-weight: bold;
+  color: grey;
+}
+
+.error-text {
+  font-size: 10px;
+  font-weight: bold;
+  color: grey;
+  top: 69%;
+  position: absolute;
+}
+
+.convertor-swap {
+  position: relative;
+}
+
+.convertor-swap-btn {
+  padding: unset;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.convertor-swap-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 1;
+  background-color: #bfcefe;
+  height: 2px;
+}
+
+.convertor-swap-img {
+  position: relative;
+  z-index: 10;
+}
+
+.currency-option {
+  background: url(./icons/cz-curr-icon.png);
+  object-fit: cover;
 }

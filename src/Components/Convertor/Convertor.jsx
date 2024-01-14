@@ -1,96 +1,130 @@
 import { useEffect, useState } from "react";
 
+import SwapIcon from "../../icons/currency-swap.png";
+
 export function Convertor() {
   const [input, setInput] = useState(1);
   const [currencyFrom, setCurrencyFrom] = useState("EUR");
-  const [currencyTo, setCurrencyTo] = useState("USD");
+  const [currencyTo, setCurrencyTo] = useState("CZK");
   const [output, setOutput] = useState("10");
   const [data, setData] = useState(null);
-  const currencies = ["USD", "EUR", "CAD", "INR", "CZK"];
+
+  const currencies = [
+    { currency: "USD", currImg: "🇺🇸" },
+    { currency: "EUR", currImg: "🇪🇺" },
+    { currency: "PLN", currImg: "🇵🇱" },
+    { currency: "GBP", currImg: "🇬🇧" },
+    { currency: "CZK", currImg: "🇨🇿" },
+  ];
 
   const currencyOptionsFrom = currencies;
   const currencyOptionsTo = currencies;
 
   useEffect(() => {
-    async function fetchCurrency() {
-      try {
-        if (input > 0) { 
-          const res = await fetch(
-            `https://api.frankfurter.app/latest?amount=${input}&from=${currencyFrom}&to=${currencyTo}`
-          );
-          const data = await res.json();
-          setData(data);
+    const delayDebounceFn = setTimeout(() => {
+      async function fetchCurrency() {
+        try {
+          if (input > 0) {
+            const res = await fetch(
+              `https://api.frankfurter.app/latest?amount=${input}&from=${currencyFrom}&to=${currencyTo}`
+            );
+            const data = await res.json();
+            setData(data);
+          }
+        } catch (error) {
+          console.error("Error fetching data", error);
         }
-      } catch (error) {
-        console.error("Error fetching data", error);
       }
-    }
-  
-    fetchCurrency();
+
+      fetchCurrency();
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
   }, [input, currencyTo, currencyFrom]);
 
   useEffect(() => {
     if (data) {
-      setOutput(data.rates[currencyTo] + " " + currencyTo);
+      setOutput(data.rates[currencyTo]);
     }
   }, [data, currencyTo, currencyFrom]);
 
   const handleSwapCurrenciesChange = () => {
-    setCurrencyFrom(currencyTo)
-    setCurrencyTo(currencyFrom)
-  }
+    setCurrencyFrom(currencyTo);
+    setCurrencyTo(currencyFrom);
+  };
 
   return (
-    <div className="convertor-box">
-      <input
-        type="number"
-        value={input}
-        placeholder="0.1"
-        onChange={(e) => {
-          setInput(e.target.value);
-        }}
-        className="convertor-input"
-      />
-      {input == 0 && <span className="error-message">Min value to convert is 0.1</span>}
-      <select
-        className="convertor-select"
-        value={currencyFrom}
-        onChange={(e) => {
-          setCurrencyFrom(e.target.value);
-        }}
-      >
-        {currencyOptionsFrom.map((currency) => (
-          <option
-            key={currency}
-            value={currency}
-            disabled={currency === currencyTo}
+    <div className="container">
+      <div className="convertor-box">
+        <div className="convertor-wrap">
+          <span className="small-text">Amount</span>
+          <div className="convert-converted">
+            <input
+              type="number"
+              value={input}
+              placeholder="0.1"
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
+              className="output-input"
+            />
+            <select
+              className="convertor-select"
+              value={currencyFrom}
+              onChange={(e) => {
+                setCurrencyFrom(e.target.value);
+              }}
+            >
+              {currencyOptionsFrom.map((currency) => (
+                <option
+                  key={currency.currency}
+                  value={currency.currency}
+                  disabled={currency.currency === currencyTo}
+                  className="currency-option"
+                >
+                  {currency.currImg} {currency.currency}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="convertor-swap">
+          <button
+            onClick={handleSwapCurrenciesChange}
+            className="convertor-swap-btn"
           >
-            {" "}
-            {currency}
-          </option>
-        ))}
-      </select>
-      <select
-        className="convertor-select"
-        value={currencyTo}
-        onChange={(e) => {
-          setCurrencyTo(e.target.value);
-        }}
-      >
-        {currencyOptionsTo.map((currency) => (
-          <option
-            key={currency}
-            value={currency}
-            disabled={currency === currencyFrom}
-          >
-            {currency}
-          </option>
-        ))}
-      </select>
-      <button onClick={handleSwapCurrenciesChange} className="convertor-output">SWAP CURRENCIES</button>
-      {output && input > 0 && <p className="convertor-output">{output}</p>}
+            <img className="convertor-swap-img" src={SwapIcon} alt="" />
+          </button>
+          <div className="convertor-swap-linethrough"></div>
+        </div>
+        <div className="convertor-wrap">
+          <span className="small-text">Converted amount</span>
+          <div className="convert-converted">
+            <p className="output-input">{input <= 0 ? 0 : output}</p>
+            <select
+              className="convertor-select"
+              value={currencyTo}
+              onChange={(e) => {
+                setCurrencyTo(e.target.value);
+              }}
+            >
+              {currencyOptionsTo.map((currency) => (
+                <option
+                  key={currency.currency}
+                  value={currency.currency}
+                  disabled={currency.currency === currencyFrom}
+                >
+                  {currency.currImg} {currency.currency}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+      {input == 0 && (
+        <span className="error-text">Min value to convert is 0.1</span>
+      )}
     </div>
   );
 }
 
-// `https://api.frankfurter.app/latest?amount=100&from=EUR&to=USD`
+
