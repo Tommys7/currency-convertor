@@ -88,7 +88,7 @@ export function Convertor() {
         ))}
       </select>
       <button onClick={handleSwapCurrenciesChange} className="convertor-output">SWAP CURRENCIES</button>
-      {output && input && <p className="convertor-output">{output}</p>}
+      {output && input > 0 && <p className="convertor-output">{output}</p>}
     </div>
   );
 }
