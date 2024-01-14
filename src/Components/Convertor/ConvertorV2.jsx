@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export function Convertor() {
   const [input, setInput] = useState(1);
+  console.log(input)
   const [currencyFrom, setCurrencyFrom] = useState("EUR");
   const [currencyTo, setCurrencyTo] = useState("USD");
   const [output, setOutput] = useState("10");
@@ -10,22 +11,19 @@ export function Convertor() {
 
   const currencyOptionsFrom = currencies;
   const currencyOptionsTo = currencies;
-
   useEffect(() => {
     async function fetchCurrency() {
       try {
-        if (input > 0) { 
-          const res = await fetch(
-            `https://api.frankfurter.app/latest?amount=${input}&from=${currencyFrom}&to=${currencyTo}`
-          );
-          const data = await res.json();
-          setData(data);
-        }
+        const res = await fetch(
+          `https://api.frankfurter.app/latest?amount=${!input || input < 0.1 ? 0.1 : input}&from=${currencyFrom}&to=${currencyTo}`
+        );
+        const data = await res.json();
+        setData(data);
       } catch (error) {
         console.error("Error fetching data", error);
       }
     }
-  
+
     fetchCurrency();
   }, [input, currencyTo, currencyFrom]);
 
@@ -45,7 +43,7 @@ export function Convertor() {
       <input
         type="number"
         value={input}
-        placeholder="0.1"
+        placeholder="1"
         onChange={(e) => {
           setInput(e.target.value);
         }}
@@ -88,7 +86,7 @@ export function Convertor() {
         ))}
       </select>
       <button onClick={handleSwapCurrenciesChange} className="convertor-output">SWAP CURRENCIES</button>
-      {output && input && <p className="convertor-output">{output}</p>}
+      <p className="convertor-output">{output}</p>
     </div>
   );
 }
