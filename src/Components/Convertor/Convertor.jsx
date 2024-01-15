@@ -119,12 +119,10 @@ export function Convertor() {
             </select>
           </div>
         </div>
+        {input == 0 && (
+          <span className="error-text">Min value to convert is 0.1</span>
+        )}
       </div>
-      {input == 0 && (
-        <span className="error-text">Min value to convert is 0.1</span>
-      )}
     </div>
   );
 }
-
-
