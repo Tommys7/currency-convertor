@@ -81,7 +81,7 @@ export function Convertor() {
                   disabled={currency.currency === currencyTo}
                   className="currency-option"
                 >
-                  {currency.currImg} {currency.currency}
+                  {currency.currency}
                 </option>
               ))}
             </select>
@@ -113,7 +113,7 @@ export function Convertor() {
                   value={currency.currency}
                   disabled={currency.currency === currencyFrom}
                 >
-                  {currency.currImg} {currency.currency}
+                  {currency.currency}
                 </option>
               ))}
             </select>
